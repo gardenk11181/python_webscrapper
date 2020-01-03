@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 URL = f"https://www.indeed.com/jobs?q=python&limit={LIMIT}"
 
-def extract_indeed_pages():
+def get_last_page():
     result = requests.get(URL)
 
     soup = BeautifulSoup(result.text, "html.parser")  # page의 모든 html을 가져온다.
@@ -41,14 +41,19 @@ def extract_job(html):
             'link':f"https://www.indeed.com/viewjob?jk={job_id}"
             }
 
-def extract_indeed_jobs(last_page):
+def extract_jobs(last_page):
     jobs=[]
     for page in range(last_page):
-        print(f"Scrapping page {page}")
+        print(f"Scrapping indeed page {page}")
         result = requests.get(f"{URL}&start={page * LIMIT}")
         soup = BeautifulSoup(result.text, "html.parser")
         results = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
         for res in results:
             job = extract_job(res)
             jobs.append(job)
+    return jobs
+
+def get_jobs():
+    last_page = get_last_page()
+    jobs = extract_jobs(last_page)
     return jobs
