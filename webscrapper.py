@@ -8,5 +8,5 @@ def save_jobs_csv():
     jobs = indeed_jobs + so_jobs
     save_to_file(jobs)
 
-save_jobs_csv()
+# save_jobs_csv()
 
